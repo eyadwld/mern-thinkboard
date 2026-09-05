@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 
-import { createAccount, login } from "../controllers/auth.js";
+import { createAccount, login, logout } from "../controllers/auth.js";
 
 const router = express.Router();
 
@@ -43,5 +43,7 @@ router.post(
   ],
   login,
 );
+
+router.post("/logout", logout);
 
 export default router;

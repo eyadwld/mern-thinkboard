@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import path from "path";
 
 import notesRoutes from "./routes/notes.js";
@@ -15,10 +16,17 @@ const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve(); // this is needed because we are using ES modules and __dirname is not available by default so we need to use path.resolve() to get the current directory path and resolve function is used to resolve the path of the current directory.
 
 app.use(express.json());
+app.use(cookieParser());
 
 if (process.env.NODE_ENV !== "production") {
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:5173", // Vite dev server
+      credentials: true, // Allow cookies to be sent cross-origin
+    }),
+  );
 }
+
 
 app.use(rateLimiter);
 

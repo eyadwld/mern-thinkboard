@@ -65,12 +65,28 @@ export const login = async (req, res, next) => {
       { expiresIn: "1h" },
     );
 
+    // Set token in an HttpOnly cookie — inaccessible to JavaScript (XSS-safe)
+    res.cookie("token", token, {
+      httpOnly: true,           // JS cannot read this cookie
+      secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+      sameSite: "strict",       // CSRF protection
+      maxAge: 60 * 60 * 1000,   // 1 hour, matches JWT expiry
+    });
+
     res.status(200).json({
       message: "Login successful",
-      token: token,
-      userId: user._id.toString(),
+      userId: user._id.toString(), // token is in cookie, not in body
     });
   } catch (error) {
     next(error);
   }
+};
+
+export const logout = (_req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  res.status(200).json({ message: "Logged out" });
 };

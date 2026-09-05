@@ -33,10 +33,10 @@ const LoginPage = () => {
         password,
       });
 
-      const { token, userId } = response.data;
+      const { userId } = response.data;
 
-      // Update authentication state setting localStorage
-      login(token, userId);
+      // Token is stored as an HttpOnly cookie by the server
+      login(userId);
 
       toast.success("Login successful");
 
