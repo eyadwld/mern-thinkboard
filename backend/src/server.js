@@ -11,7 +11,7 @@ import rateLimiter from "./middleware/rate-limiter.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve(); // this is needed because we are using ES modules and __dirname is not available by default so we need to use path.resolve() to get the current directory path and resolve function is used to resolve the path of the current directory.
 
 app.use(express.json());
@@ -26,7 +26,9 @@ app.use("/api/notes", notesRoutes);
 app.use("/api/auth", authRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist"))); // we use this in production to serve the static files from the frontend build folder. The path.join() method is used to join the current directory path with the frontend build folder path and express.static() method is used to serve the static files from the build folder.
+  const frontendPath = path.join(__dirname, "../frontend/dist");
+
+  app.use(express.static(frontendPath)); // we use this in production to serve the static files from the frontend build folder. The path.join() method is used to join the current directory path with the frontend build folder path and express.static() method is used to serve the static files from the build folder.
 
   app.get("*", (req, res, next) => {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
@@ -41,6 +43,6 @@ app.use((error, _req, res, _next) => {
 
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log("Server is running on port 5001");
+    console.log("Server is running on port " + PORT);
   });
 });
