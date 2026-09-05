@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const BASE_URL =
+  import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api"; // we use this to set the base URL for the API requests. If we are in development mode, we use the localhost URL, otherwise we use the relative URL for production.
+
 const api = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
