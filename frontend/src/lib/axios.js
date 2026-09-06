@@ -8,7 +8,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Send the HttpOnly cookie on every request automatically
+  withCredentials: true, // Send the HttpOnly cookie on every request automatically to client
 });
 
 // Handle unauthorized responses (expired / missing cookie)
